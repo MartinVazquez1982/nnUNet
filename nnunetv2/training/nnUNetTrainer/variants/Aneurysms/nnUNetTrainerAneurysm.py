@@ -8,7 +8,7 @@ class nnUNetTrainerAneurysm(nnUNetTrainer):
         super().__init__(plans, configuration, fold, dataset_json, unpack_dataset, device)
         
         #Este parámetro define directamente el número de veces que la red recorrerá todo el conjunto de datos de entrenamiento.
-        self.num_epochs = 200 #Por defecto 1000
+        self.num_epochs = 100 #Por defecto 1000
         
         # Este parámetro define el número de iteraciones de entrenamiento por época. 
         # Sin embargo, el tamaño del lote real se calcula indirectamente dividiendo este número por el número de muestras de entrenamiento 
