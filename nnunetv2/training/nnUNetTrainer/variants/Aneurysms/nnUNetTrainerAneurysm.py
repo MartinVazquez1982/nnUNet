@@ -1,6 +1,10 @@
 import torch
+import numpy as np
 
 from nnunetv2.training.nnUNetTrainer.nnUNetTrainer import nnUNetTrainer
+from typing import List, Union, Tuple
+from batchgenerators.transforms.abstract_transforms import AbstractTransform
+
 
 class nnUNetTrainerAneurysm(nnUNetTrainer):
     
@@ -26,5 +30,32 @@ class nnUNetTrainerAneurysm(nnUNetTrainer):
         # # Este parámetro funciona de manera similar al anterior pero determina el número de iteraciones de validación por época, 
         # # definiendo indirectamente el tamaño del lote de validación
         # self.num_val_iterations_per_epoch = 50 #Por defecto 50
+    
+    def get_training_transforms(patch_size: Union[np.ndarray, Tuple[int]],
+                                rotation_for_DA: dict,
+                                deep_supervision_scales: Union[List, Tuple, None],
+                                mirror_axes: Tuple[int, ...],
+                                do_dummy_2d_data_aug: bool,
+                                order_resampling_data: int = 3,
+                                order_resampling_seg: int = 1,
+                                border_val_seg: int = -1,
+                                use_mask_for_norm: List[bool] = None,
+                                is_cascaded: bool = False,
+                                foreground_labels: Union[Tuple[int, ...], List[int]] = None,
+                                regions: List[Union[List[int], Tuple[int, ...], int]] = None,
+                                ignore_label: int = None) -> AbstractTransform:
+        
+        matching_axes = np.array([sum([i == j for j in patch_size]) for i in patch_size])
+        valid_axes = list(np.where(matching_axes == np.max(matching_axes))[0])
+        
+        tr_transforms = []
+        
+        if do_dummy_2d_data_aug:
+            ignore_axes = (0,)
+            tr_transforms.append(Convert3DTo2DTransform())
+            patch_size_spatial = patch_size[1:]
+        else:
+            patch_size_spatial = patch_size
+            ignore_axes = None
         
         
