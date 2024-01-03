@@ -17,7 +17,7 @@ class nnUNetTrainerAneurysm(nnUNetTrainer):
          # -------------- NUMERO DE EPOCAS -------------------- #
         
         #Este parámetro define directamente el número de veces que la red recorrerá todo el conjunto de datos de entrenamiento.
-        self.num_epochs = 100 #Por defecto 1000
+        self.num_epochs = 200 #Por defecto 1000
         
         # ---------- NUMERO DE ITERACIONES POR EPOCA --> TAMAÑO DEL LOTE -------------------------- #
         
