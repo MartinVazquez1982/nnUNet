@@ -9,7 +9,6 @@ from batchgenerators.transforms.utility_transforms import NumpyToTensor, RenameT
 from nnunetv2.training.data_augmentation.custom_transforms.deep_supervision_donwsampling import \
     DownsampleSegForDSTransform2
 from batchgenerators.transforms.spatial_transforms import SpatialTransform
-<<<<<<< HEAD
 
 #----- IMPORTS NECESARIOS PARA LAS FUNCIONES DE TRAINER DA5 -----
 from batchgenerators.transforms.color_transforms import BrightnessTransform, ContrastAugmentationTransform, \
@@ -33,8 +32,6 @@ from nnunetv2.training.data_augmentation.custom_transforms.region_based_training
     ConvertSegmentationToRegionsTransform
 from nnunetv2.training.data_augmentation.custom_transforms.transforms_for_dummy_2d import Convert3DTo2DTransform, \
     Convert2DTo3DTransform
-=======
->>>>>>> 215834141f80a337a8db9733939e327837eb09aa
 
 class nnUNetTrainerAneurysm(nnUNetTrainer):
     
@@ -44,11 +41,7 @@ class nnUNetTrainerAneurysm(nnUNetTrainer):
          # -------------- NUMERO DE EPOCAS -------------------- #
         
         #Este parámetro define directamente el número de veces que la red recorrerá todo el conjunto de datos de entrenamiento.
-<<<<<<< HEAD
         self.num_epochs = 400 #Por defecto 1000
-=======
-        self.num_epochs = 200 #Por defecto 1000
->>>>>>> 215834141f80a337a8db9733939e327837eb09aa
         
         # ---------- NUMERO DE ITERACIONES POR EPOCA --> TAMAÑO DEL LOTE -------------------------- #
         
@@ -59,7 +52,7 @@ class nnUNetTrainerAneurysm(nnUNetTrainer):
         
         # Segun chatgpt al ser un numero tan pequenio de muestras (15) lo mejor es un tamaño de lote pequeño tambien. Por eso con 5 iteraciones por epoca
         # quedaria 15/3, es decir un tamaño de lote de 5
-        self.num_iterations_per_epoch = 3 #Por defecto 250
+        self.num_iterations_per_epoch = 250 #Por defecto 250
         
         # # Este parámetro funciona de manera similar al anterior pero determina el número de iteraciones de validación por época, 
         # # definiendo indirectamente el tamaño del lote de validación
@@ -70,48 +63,53 @@ class nnUNetTrainerAneurysm(nnUNetTrainer):
         # más en aprender las características específicas del aneurisma y mejorar su capacidad para segmentarlo con precisión.
         self.oversample_foreground_percent = 0.50 #Por defecto 0.33
     
-<<<<<<< HEAD
-    # @staticmethod
-    # def get_training_transforms(patch_size: Union[np.ndarray, Tuple[int]],
-    #                             rotation_for_DA: dict,
-    #                             deep_supervision_scales: Union[List, Tuple, None],
-    #                             mirror_axes: Tuple[int, ...],
-    #                             do_dummy_2d_data_aug: bool,
-    #                             order_resampling_data: int = 3,
-    #                             order_resampling_seg: int = 1,
-    #                             border_val_seg: int = -1,
-    #                             use_mask_for_norm: List[bool] = None,
-    #                             is_cascaded: bool = False,
-    #                             foreground_labels: Union[Tuple[int, ...], List[int]] = None,
-    #                             regions: List[Union[List[int], Tuple[int, ...], int]] = None,
-    #                             ignore_label: int = None) -> AbstractTransform:
+    '''
+    
+    Minimas transformaciones que se deben realizar
+    
+    
+    @staticmethod
+    def get_training_transforms(patch_size: Union[np.ndarray, Tuple[int]],
+                                rotation_for_DA: dict,
+                                deep_supervision_scales: Union[List, Tuple, None],
+                                mirror_axes: Tuple[int, ...],
+                                do_dummy_2d_data_aug: bool,
+                                order_resampling_data: int = 3,
+                                order_resampling_seg: int = 1,
+                                border_val_seg: int = -1,
+                                use_mask_for_norm: List[bool] = None,
+                                is_cascaded: bool = False,
+                                foreground_labels: Union[Tuple[int, ...], List[int]] = None,
+                                regions: List[Union[List[int], Tuple[int, ...], int]] = None,
+                                ignore_label: int = None) -> AbstractTransform:
         
-    #     tr_transforms = []       
-      
-    #     tr_transforms.append(SpatialTransform(
-    #         patch_size, patch_center_dist_from_border=None,
-    #         do_elastic_deform=False, alpha=(0, 0), sigma=(0, 0),
-    #         do_rotation=True, angle_x=rotation_for_DA['x'], angle_y=rotation_for_DA['y'], angle_z=rotation_for_DA['z'],
-    #         p_rot_per_axis=1,  # todo experiment with this
-    #         do_scale=True, scale=(0.7, 1.4),
-    #         border_mode_data="constant", border_cval_data=0, order_data=order_resampling_data,
-    #         border_mode_seg="constant", border_cval_seg=border_val_seg, order_seg=order_resampling_seg,
-    #         random_crop=False,  # random cropping is part of our dataloaders
-    #         p_el_per_sample=0, p_scale_per_sample=0.2, p_rot_per_sample=0.2,
-    #         independent_scale_for_each_axis=False  # todo experiment with this
-    #     ))
+        tr_transforms = []       
+    
+        tr_transforms.append(SpatialTransform(
+            patch_size, patch_center_dist_from_border=None,
+            do_elastic_deform=False, alpha=(0, 0), sigma=(0, 0),
+            do_rotation=True, angle_x=rotation_for_DA['x'], angle_y=rotation_for_DA['y'], angle_z=rotation_for_DA['z'],
+            p_rot_per_axis=1,  # todo experiment with this
+            do_scale=True, scale=(0.7, 1.4),
+            border_mode_data="constant", border_cval_data=0, order_data=order_resampling_data,
+            border_mode_seg="constant", border_cval_seg=border_val_seg, order_seg=order_resampling_seg,
+            random_crop=False,  # random cropping is part of our dataloaders
+            p_el_per_sample=0, p_scale_per_sample=0.2, p_rot_per_sample=0.2,
+            independent_scale_for_each_axis=False  # todo experiment with this
+        ))
         
-    #     tr_transforms.append(RemoveLabelTransform(-1, 0))
+        tr_transforms.append(RemoveLabelTransform(-1, 0))
 
-    #     tr_transforms.append(RenameTransform('seg', 'target', True))
+        tr_transforms.append(RenameTransform('seg', 'target', True))
 
-    #     if deep_supervision_scales is not None:
-    #         tr_transforms.append(DownsampleSegForDSTransform2(deep_supervision_scales, 0, input_key='target',
-    #                                                           output_key='target'))
+        if deep_supervision_scales is not None:
+            tr_transforms.append(DownsampleSegForDSTransform2(deep_supervision_scales, 0, input_key='target',
+                                                              output_key='target'))
             
-    #     tr_transforms.append(NumpyToTensor(['data', 'target'], 'float'))
+        tr_transforms.append(NumpyToTensor(['data', 'target'], 'float'))
         
-    #     return Compose(tr_transforms)
+        return Compose(tr_transforms)
+    '''
 
     def configure_rotation_dummyDA_mirroring_and_inital_patch_size(self):
         """
@@ -170,8 +168,6 @@ class nnUNetTrainerAneurysm(nnUNetTrainer):
 
         return rotation_for_DA, do_dummy_2d_data_aug, initial_patch_size, mirror_axes
 
-=======
->>>>>>> 215834141f80a337a8db9733939e327837eb09aa
     @staticmethod
     def get_training_transforms(patch_size: Union[np.ndarray, Tuple[int]],
                                 rotation_for_DA: dict,
@@ -186,7 +182,6 @@ class nnUNetTrainerAneurysm(nnUNetTrainer):
                                 foreground_labels: Union[Tuple[int, ...], List[int]] = None,
                                 regions: List[Union[List[int], Tuple[int, ...], int]] = None,
                                 ignore_label: int = None) -> AbstractTransform:
-<<<<<<< HEAD
         matching_axes = np.array([sum([i == j for j in patch_size]) for i in patch_size])
         valid_axes = list(np.where(matching_axes == np.max(matching_axes))[0])
 
@@ -395,32 +390,3 @@ def _brightness_gradient_additive_max_strength(_x, _y):
 
 def _local_gamma_gamma():
     return np.random.uniform(0.01, 0.8) if np.random.uniform() < 0.5 else np.random.uniform(1.5, 4)
-=======
-        
-        tr_transforms = []       
-        
-        tr_transforms.append(SpatialTransform(
-            patch_size, patch_center_dist_from_border=None,
-            do_elastic_deform=False, alpha=(0, 0), sigma=(0, 0),
-            do_rotation=True, angle_x=rotation_for_DA['x'], angle_y=rotation_for_DA['y'], angle_z=rotation_for_DA['z'],
-            p_rot_per_axis=1,  # todo experiment with this
-            do_scale=True, scale=(0.7, 1.4),
-            border_mode_data="constant", border_cval_data=0, order_data=order_resampling_data,
-            border_mode_seg="constant", border_cval_seg=border_val_seg, order_seg=order_resampling_seg,
-            random_crop=False,  # random cropping is part of our dataloaders
-            p_el_per_sample=0, p_scale_per_sample=0.2, p_rot_per_sample=0.2,
-            independent_scale_for_each_axis=False  # todo experiment with this
-        ))
-        
-        tr_transforms.append(RemoveLabelTransform(-1, 0))
-
-        tr_transforms.append(RenameTransform('seg', 'target', True))
-
-        if deep_supervision_scales is not None:
-            tr_transforms.append(DownsampleSegForDSTransform2(deep_supervision_scales, 0, input_key='target',
-                                                              output_key='target'))
-            
-        tr_transforms.append(NumpyToTensor(['data', 'target'], 'float'))
-        
-        return Compose(tr_transforms)
->>>>>>> 215834141f80a337a8db9733939e327837eb09aa
