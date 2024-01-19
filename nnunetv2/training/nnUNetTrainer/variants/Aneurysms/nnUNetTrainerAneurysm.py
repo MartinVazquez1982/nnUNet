@@ -61,7 +61,7 @@ class nnUNetTrainerAneurysm(nnUNetTrainer):
         # Este parametro es util para ajustar la atención del modelo durante el entrenamiento hacia los píxeles que corresponden al aneurisma. 
         # Si tu aneurisma es pequeño en comparación con el fondo en cada imagen, incrementar este parámetro podría ayudar al modelo a centrarse 
         # más en aprender las características específicas del aneurisma y mejorar su capacidad para segmentarlo con precisión.
-        self.oversample_foreground_percent = 0.50 #Por defecto 0.33
+        self.oversample_foreground_percent = 0.75 #Por defecto 0.33
     
     '''
     
