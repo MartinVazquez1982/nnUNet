@@ -121,4 +121,12 @@ def export_pretrained_model(dataset_name_or_id: Union[int, str], output_file: st
 
 
 if __name__ == '__main__':
-    export_pretrained_model(2, '/home/fabian/temp/dataset2.zip', strict=False, export_crossval_predictions=True, folds=(0, ))
+    export_pretrained_model( 
+        dataset_name_or_id=1, 
+        output_file='', 
+        configurations=("3d_fullres_Aneurysm", ), 
+        trainer='nnUNetTrainerAneurysm',
+        folds=(0, ),
+        strict=False,
+        export_crossval_predictions=True
+    )
